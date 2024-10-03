@@ -52,27 +52,52 @@ function isValidInput(currentInput, newChar) {
 
 let display = document.querySelector("#textbox");
 let displayArray = [];
+let divisionBy0 = false;
+let mustClear = false;
+let dotCount = 0;
 const btns = document.querySelectorAll("button");
 
 btns.forEach((button) => {
   button.addEventListener("click", () => {
+    if (isOperator(button.textContent)) dotCount = 0;
+    else if (button.textContent === ".") dotCount++;
+    if (dotCount >= 2) {
+      dotCount--;
+      return;
+    }
+    if (
+      display.textContent.slice(-1) === "/" &&
+      Number(button.textContent) === 0
+    ) {
+      display.textContent = "You can't divide by 0, idiot";
+      mustClear = true;
+    }
     // Check if the input is valid before adding it to the display
-    if (isValidInput(display.textContent, button.textContent)) {
+    else if (isValidInput(display.textContent, button.textContent)) {
       if (!(button.textContent === "=")) {
-        display.textContent += button.textContent;
-        displayArray = display.textContent.match(
-          /(?<![\d.])-?\d+(\.\d+)?|\+|\*|\/|=|-/g
-        ); // A good way to handle this is to modify the regular expression so that a negative number is only considered as such if it follows an operator or appears at the start of the string.}
+        if (mustClear) {
+          display.textContent = "";
+          mustClear = false;
+        }
+        if (
+          button.textContent === "." &&
+          (display.textContent === "" || /[+\-*/]$/.test(display.textContent))
+        ) {
+          console.log("Got here");
+          display.textContent += "0."; // If display is empty or the last character is an operator, prepend '0'
+        } else {
+          display.textContent += button.textContent;
+          displayArray = display.textContent.match(
+            /(?<![\d.])-?\d+(\.\d+)?|\+|\*|\/|=|-/g
+          );
+        } // A good way to handle this is to modify the regular expression so that a negative number is only considered as such if it follows an operator or appears at the start of the string.}
       } else {
         displayArray.push("=");
       }
-      console.log(`1: ${displayArray}`);
     }
     if (button.textContent === "C") display.textContent = "";
 
     if (displayArray.length > 3) {
-      console.log(`2: ${displayArray}`);
-
       if (button.textContent === "=") {
         display.textContent = parseFloat(
           operate(
@@ -81,9 +106,7 @@ btns.forEach((button) => {
             Number(displayArray[2])
           ).toFixed(5)
         );
-        console.log(`3: ${displayArray}`);
         displayArray = [display.textContent];
-        console.log(`4: ${displayArray}`);
       } else {
         display.textContent =
           parseFloat(
@@ -96,7 +119,6 @@ btns.forEach((button) => {
         displayArray = [display.textContent, button.textContent];
       }
     } else {
-      console.log(`5: ${displayArray}`);
     }
   });
 });

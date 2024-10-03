@@ -36,8 +36,23 @@ body {
   display: flex; /* Make it a flexbox to stretch properly */
   justify-content: center; /* Center text inside */
   align-items: center; /* Center text vertically */
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  font-size: larger;
 }
 
 #clear {
   padding: 0;
+  background-color: orange;
+}
+
+button {
+  background-color: lightgreen;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  font-size: larger;
+  border-top: 0;
+}
+button.operator {
+  background-color: lightblue;
 }
