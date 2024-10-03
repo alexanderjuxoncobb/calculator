@@ -122,3 +122,38 @@ btns.forEach((button) => {
     }
   });
 });
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Backspace") {
+    // document.querySelector("#clear").click();
+    display.textContent = display.textContent.slice(0, -1);
+  } else if (event.key === "Enter") {
+    event.preventDefault();
+    document.querySelector("button#equals").click();
+  } else if (event.key === "c") {
+    document.querySelector("button#clear").click();
+  } else if (
+    [
+      "1",
+      "2",
+      "3",
+      "/",
+      "4",
+      "5",
+      "6",
+      "*",
+      "7",
+      "8",
+      "9",
+      "-",
+      ".",
+      "0",
+      "+",
+    ].includes(event.key)
+  ) {
+    const button = Array.from(btns).find(
+      (btn) => btn.textContent === event.key
+    );
+    button.click();
+  }
+});
